@@ -1,0 +1,38 @@
+.clearfix {
+  padding-top: 10px;
+}
+.pagination-status {
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-status__item {
+  list-style-type: none;
+  padding: 0px 5px;
+  font-size: 1rem;
+}
+.pagination-status__btn {
+  background-color: #2574a9;
+  color: White;
+  border-radius: 2px;
+  border: 0px solid;
+  padding: 12px;
+  line-height: 10px;
+}
+.pagination-status__btn--active {
+  background-color: white;
+  color: #2574a9;
+}
+.title {
+  text-align: center;
+  background-color: #2574a9;
+  color: white;
+  padding: 5px;
+}
+.search-btn {
+  background-color: #2574a9;
+}
+.search-btn:hover {
+  background-color: #2574a9;
+  border: 0px solid;
+}
