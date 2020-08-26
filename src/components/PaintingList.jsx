@@ -3,22 +3,23 @@ import ProductDataService from "../services/ProductServices";
 // import { Link } from "react-router-dom";
 // import ReactDOM from "react-dom";
 import SideBar from "../SideBar";
-import { TablePagination } from "react-pagination-table";
+// import { TablePagination } from "react-pagination-table";
 import "./ProductList.css";
+import { Icon, Menu, Table } from "semantic-ui-react";
 
-const ProductList = () => {
+const PaintingList = () => {
   const [products, setProducts] = useState([]);
   // const [currentProduct, setCurrentProduct] = useState(null);
   // const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchName, setSearchName] = useState("");
 
-  const Header = ["Id", "Name", "Price", "SKU", "Status"];
+  //   const Header = ["Id", "Name", "Permalink", "SKU", "Status"];
   useEffect(() => {
     retriveProducts();
   }, []);
 
   const retriveProducts = () => {
-    ProductDataService.getAll()
+    ProductDataService.getCategory()
 
       .then((response) => {
         setProducts(response.data);
@@ -28,6 +29,8 @@ const ProductList = () => {
         // console.log(e);
       });
   };
+  const count = Object.keys(products).length;
+  console.log(count);
 
   // const refreshList = () => {
   //   retriveProducts();
@@ -74,7 +77,38 @@ const ProductList = () => {
         // console.log(e);
       });
   };
-  console.log(products);
+  const fetchingImages = (sku) => {
+    var url = "https://cdn.imfpa.org/paintings/";
+    var paintingSize = [
+      "_800",
+      "_O",
+      "_800-30cm-Black-0.5",
+      "_800-40cm-Black-0.5.jpg",
+      "_800-50cm-Black-0.5",
+    ];
+    var ext = ".jpg";
+    var length = [30, 40, 50, 60, 70, 80];
+    var color = ["black", "brown"];
+    var painting_type = [0.5, 0.75];
+    var image1 = url + sku + paintingSize[0] + ext;
+    var image2 = url + sku + paintingSize[1] + ext;
+    var image3 = url + sku + paintingSize[2] + ext;
+    var image4 = url + sku + paintingSize[3] + ext;
+    var image5 = url + sku + paintingSize[4] + ext;
+
+    var frame1 =
+      url +
+      sku +
+      "_800-" +
+      length[0] +
+      "cm-" +
+      color[0] +
+      "-" +
+      painting_type[0] +
+      ext;
+
+    // return sku;
+  };
 
   return (
     <>
@@ -99,24 +133,38 @@ const ProductList = () => {
               </button>
             </div>
           </div>
+          <h4 className="title">Painting List</h4>
 
-          <TablePagination
-            title="Product List"
-            // subTitle="Sub Title"
-            headers={Header}
-            data={products}
-            columns="id.name.price.sku.status"
-            perPageItemCount={10}
-            // partialPageCount={3}
-            totalCount={100}
-            arrayOption={[["size", "all", " "]]}
-            nextPageText="Next"
-            prePageText="Prev"
-            className="table-striped table-light table-responsive"
-          />
+          <Table singleLine>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Id</Table.HeaderCell>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>SKU</Table.HeaderCell>
+                <Table.HeaderCell>Image</Table.HeaderCell>
+                <Table.HeaderCell>Variations</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              {products.map((product) => {
+                return (
+                  <Table.Row key={product.id}>
+                    <Table.Cell>{product.id}</Table.Cell>
+                    <Table.Cell>
+                      <a href={product.permalink}>{product.name}</a>
+                    </Table.Cell>
+                    <Table.Cell>{product.sku}</Table.Cell>
+                    <Table.Cell>{fetchingImages(product.sku)}</Table.Cell>
+                    <Table.Cell>{product.variations.length}</Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </Table>
         </div>
       </div>
     </>
   );
 };
-export default ProductList;
+export default PaintingList;

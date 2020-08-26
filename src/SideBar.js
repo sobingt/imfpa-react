@@ -44,6 +44,12 @@ function SideBar() {
               <font>Product List</font>
             </Link>
           </li>
+          <li>
+            <Link to="/paintings">
+              <i className="fa fa-photo" aria-hidden="true"></i>
+              <font>Painting List</font>
+            </Link>
+          </li>
           {/* <li>
             <Link to="/add">
               <i className="fa fa-plus" aria-hidden="true"></i>

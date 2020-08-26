@@ -3,6 +3,9 @@ import http from "../http";
 const getAll = () => {
   return http.get("/products?per_page=100");
 };
+const getCategory = () => {
+  return http.get("/products?category=156&&per_page=10&&page=5");
+};
 // const get = (id) => {
 //   return http.get(`/products/${id}`);
 // };
@@ -35,4 +38,5 @@ export default {
   // remove,
   // removeAll,
   findById,
+  getCategory,
 };

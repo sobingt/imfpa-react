@@ -7,6 +7,7 @@ import Error from "./screens/Error";
 import AddProduct from "./components/AddProduct";
 import Product from "./components/Product";
 import ProductList from "./components/ProductList";
+import PaintingList from "./components/PaintingList";
 function App() {
   return (
     <>
@@ -14,6 +15,7 @@ function App() {
         <Route exact path="/dashboard" component={HomeScreen} />
         <Route exact path="/" component={LoginScreen} />
         <Route path="/add" component={AddProduct} />
+        <Route path="/paintings" component={PaintingList} />
         <Route path="/products/:id" component={Product} />
         <Route exact path={["/", "/products"]} component={ProductList} />
         <Route component={Error} />
