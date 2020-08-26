@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductDataService from "../services/ProductServices";
+import ImageStatus from "./ImageStatus";
+import GetImages from "./GetImages";
 // import { Link } from "react-router-dom";
 // import ReactDOM from "react-dom";
 import SideBar from "../SideBar";
@@ -9,18 +11,15 @@ import { Icon, Menu, Table } from "semantic-ui-react";
 
 const PaintingList = () => {
   const [products, setProducts] = useState([]);
-  // const [currentProduct, setCurrentProduct] = useState(null);
-  // const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchName, setSearchName] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(1);
 
-  //   const Header = ["Id", "Name", "Permalink", "SKU", "Status"];
   useEffect(() => {
     retriveProducts();
   }, []);
 
   const retriveProducts = () => {
-    ProductDataService.getCategory()
-
+    ProductDataService.getCategory(10, currentIndex)
       .then((response) => {
         setProducts(response.data);
         console.log(response.data);
@@ -32,36 +31,64 @@ const PaintingList = () => {
   const count = Object.keys(products).length;
   console.log(count);
 
-  // const refreshList = () => {
-  //   retriveProducts();
-  //   setCurrentProduct(null);
-  //   // setCurrentIndex(-1);
-  // };
-  // const setActiveProduct = (product, index) => {
-  //   setCurrentProduct(product);
-  //   setCurrentIndex(index);
-  // };
-  // const removeAllProducts = () => {
-  //   ProductDataService.removeAll()
-  //     .then((response) => {
-  //       // console.log(response.data);
-  //       refreshList();
-  //     })
-  //     .catch((e) => {
-  //       // console.log(e);
-  //     });
-  // };
 
-  // const removeProduct = () => {
-  //   ProductDataService.remove(currentProduct.id)
-  //     .then((response) => {
-  //       // console.log(response.data);
-  //       refreshList();
-  //     })
-  //     .catch((error) => {
-  //       console.log(error.response.data);
-  //     });
-  // };
+  const nextProducts = () => {
+    if (searchName != '') {
+      ProductDataService.findByTermInPainting(searchName, 10, currentIndex + 1)
+
+      .then((response) => {
+        setProducts(response.data);
+        console.log(response.data);
+        const nextPage = currentIndex + 1;
+        setCurrentIndex(nextPage)
+      })
+      .catch((e) => {
+        // console.log(e);
+      });
+     } else {
+      ProductDataService.getCategory(10, currentIndex + 1)
+
+        .then((response) => {
+          setProducts(response.data);
+          console.log(response.data);
+          const nextPage = currentIndex + 1;
+          setCurrentIndex(nextPage)
+        })
+        .catch((e) => {
+          // console.log(e);
+        });
+    }
+  };
+
+  const prevProducts = () => {
+    if (searchName != '') {
+      ProductDataService.findByTermInPainting(searchName, 10, currentIndex - 1)
+
+        .then((response) => {
+          setProducts(response.data);
+          console.log(response.data);
+          const prevPage = currentIndex - 1;
+          setCurrentIndex(prevPage)
+        })
+        .catch((e) => {
+          // console.log(e);
+        });
+    } else {
+      ProductDataService.getCategory(10, currentIndex - 1)
+
+        .then((response) => {
+          setProducts(response.data);
+          console.log(response.data);
+          const prevPage = currentIndex - 1;
+          setCurrentIndex(prevPage)
+        })
+        .catch((e) => {
+          // console.log(e);
+        });
+    }
+
+  };
+
 
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
@@ -77,62 +104,52 @@ const PaintingList = () => {
         // console.log(e);
       });
   };
-  const fetchingImages = (sku) => {
-    var url = "https://cdn.imfpa.org/paintings/";
-    var paintingSize = [
-      "_800",
-      "_O",
-      "_800-30cm-Black-0.5",
-      "_800-40cm-Black-0.5.jpg",
-      "_800-50cm-Black-0.5",
-    ];
-    var ext = ".jpg";
-    var length = [30, 40, 50, 60, 70, 80];
-    var color = ["black", "brown"];
-    var painting_type = [0.5, 0.75];
-    var image1 = url + sku + paintingSize[0] + ext;
-    var image2 = url + sku + paintingSize[1] + ext;
-    var image3 = url + sku + paintingSize[2] + ext;
-    var image4 = url + sku + paintingSize[3] + ext;
-    var image5 = url + sku + paintingSize[4] + ext;
 
-    var frame1 =
-      url +
-      sku +
-      "_800-" +
-      length[0] +
-      "cm-" +
-      color[0] +
-      "-" +
-      painting_type[0] +
-      ext;
-
-    // return sku;
+  const findByTerm = () => {
+    ProductDataService.findByTermInPainting(searchName, 10, currentIndex)
+      .then((response) => {
+        setProducts(response.data);
+        // console.log(response.data);
+      })
+      .catch((e) => {
+        // console.log(e);
+      });
   };
 
+
   return (
-    <>
+    <div>
       <SideBar />
       <div className="page-container">
         <div className="jumbotron">
-          <div className="input-group mb-3">
-            <textarea
-              className="form-control"
-              rows="1"
-              placeholder="Search by id (give space or comma between two id's)"
-              value={searchName}
-              onChange={onChangeSearchName}
-            ></textarea>
-            <div className="input-group-append">
-              <button
-                className="btn search-btn text-white btn-outline-secondary"
-                type="button"
-                onClick={findById}
-              >
-                Search
+          <div className="col-md-12">
+            <div className="input-group mb-3">
+              <textarea
+                className="form-control"
+                rows="1"
+                placeholder="Search by id (give space or comma between two id's)"
+                value={searchName}
+                onChange={onChangeSearchName}
+              ></textarea>
+              <div className="input-group-append">
+                <button
+                  className="btn search-btn text-white btn-outline-secondary"
+                  type="button"
+                  onClick={findById}
+                >
+                  Search By Id
               </button>
+                <button
+                  className="btn search-btn text-white btn-outline-secondary"
+                  type="button"
+                  onClick={findByTerm}
+                >
+                  Global Search
+              </button>
+              </div>
             </div>
           </div>
+
           <h4 className="title">Painting List</h4>
 
           <Table singleLine>
@@ -155,16 +172,34 @@ const PaintingList = () => {
                       <a href={product.permalink}>{product.name}</a>
                     </Table.Cell>
                     <Table.Cell>{product.sku}</Table.Cell>
-                    <Table.Cell>{fetchingImages(product.sku)}</Table.Cell>
+                    <Table.Cell>
+                      <GetImages sku={product.sku} />
+                      {/* <ImageStatus sku={product.sku}/> */}
+                    </Table.Cell>
                     <Table.Cell>{product.variations.length}</Table.Cell>
                   </Table.Row>
                 );
               })}
             </Table.Body>
           </Table>
+
+          <div className="clearfix">
+            <ul className="pagination-status">
+              <li className="pagination-status__item">
+                <button className="pagination-status__btn pagination-status__btn--disable" onClick={prevProducts}>Prev</button>
+              </li>
+              Page: {currentIndex}
+              <li className="pagination-status__item">
+                <button className="pagination-status__btn " onClick={nextProducts}>Next</button>
+              </li>
+            </ul>
+          </div>
+
+
+
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default PaintingList;
