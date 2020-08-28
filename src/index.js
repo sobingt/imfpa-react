@@ -5,6 +5,7 @@ import "font-awesome/css/font-awesome.min.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "semantic-ui-css/semantic.min.css";
+import 'antd/dist/antd.css';
 ReactDOM.render(
   <BrowserRouter>
     <App />

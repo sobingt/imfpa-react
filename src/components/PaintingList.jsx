@@ -3,6 +3,7 @@ import ProductDataService from "../services/ProductServices";
 import ImageStatus from "./ImageStatus";
 import GetImages from "./GetImages";
 import { Link } from "react-router-dom";
+import { Switch } from "antd";
 
 // import { Link } from "react-router-dom";
 // import ReactDOM from "react-dom";
@@ -58,11 +59,8 @@ const PaintingList = () => {
         });
     }
   };
-
   const ToggleButton = () => {
-    setImageStatus((currentState) => ({
-      imageStatus: !currentState.imageStatus,
-    }));
+    imageStatus ? setImageStatus(false) : setImageStatus(true);
   };
   const prevProducts = () => {
     if (searchName != "") {
@@ -161,10 +159,7 @@ const PaintingList = () => {
                 <Table.HeaderCell>SKU</Table.HeaderCell>
                 <Table.HeaderCell>
                   <span className="p-1">Image</span>
-                  <label class="switch">
-                    <input type="checkbox" onClick={() => ToggleButton()} />
-                    <span class="slider"></span>
-                  </label>
+                  <Switch onClick={ToggleButton} />
                 </Table.HeaderCell>
                 <Table.HeaderCell>Variations</Table.HeaderCell>
               </Table.Row>

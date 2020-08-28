@@ -6,6 +6,7 @@ import { Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { TablePagination } from "react-pagination-table";
 import "./ProductList.css";
+import { Switch } from "antd";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -19,9 +20,7 @@ const ProductList = () => {
     retriveProducts();
   }, []);
   const ToggleButton = () => {
-    setImageStatus((currentState) => ({
-      imageStatus: !currentState.imageStatus,
-    }));
+    imageStatus ? setImageStatus(false) : setImageStatus(true);
   };
   const retriveProducts = () => {
     ProductDataService.getAll(10, currentIndex)
@@ -145,11 +144,8 @@ const ProductList = () => {
                 <Table.HeaderCell>SKU</Table.HeaderCell>
                 <Table.HeaderCell>Categories</Table.HeaderCell>
                 <Table.HeaderCell>
-                  Image{" "}
-                  <label class="switch">
-                    <input type="checkbox" onClick={() => ToggleButton()} />
-                    <span class="slider"></span>
-                  </label>
+                  <span className="p-1">Image</span>
+                  <Switch onClick={ToggleButton} />
                 </Table.HeaderCell>
                 <Table.HeaderCell>Price</Table.HeaderCell>
                 <Table.HeaderCell>Variations</Table.HeaderCell>
