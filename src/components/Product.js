@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ProductDataService from "../services/ProductServices";
 import SideBar from "../SideBar";
+import { Link } from "react-router-dom";
+// import { Item } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 
 const Product = (props) => {
   const idParam = props.match.params.id.substring(3);
@@ -13,13 +16,14 @@ const Product = (props) => {
     sku: "",
   };
   const [currentProduct, setCurrentProduct] = useState(initialProductState);
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
 
   const getProduct = (id) => {
     ProductDataService.get(id)
       .then((response) => {
         setCurrentProduct(response.data);
-        // console.log(response.data);
+        console.log(response.data);
+        console.log(currentProduct);
       })
       .catch((e) => {
         // console.log(e);
@@ -30,154 +34,109 @@ const Product = (props) => {
     getProduct(props.match.params.id);
   }, [props.match.params.id]);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setCurrentProduct({ ...currentProduct, [name]: value });
-  };
+  // const handleInputChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setCurrentProduct({ ...currentProduct, [name]: value });
+  // };
 
-  const updatePurchasable = (status) => {
-    var data = {
-      id: currentProduct.id,
-      name: currentProduct.name,
-      regular_price: currentProduct.regular_price,
-      purchasable: status,
-    };
+  // const updatePurchasable = (status) => {
+  //   var data = {
+  //     id: currentProduct.id,
+  //     name: currentProduct.name,
+  //     regular_price: currentProduct.regular_price,
+  //     purchasable: status,
+  //   };
 
-    ProductDataService.update(currentProduct.id, data)
-      .then((response) => {
-        setCurrentProduct({ ...currentProduct, purchasable: status });
-        // console.log(response.data);
-      })
-      .catch((e) => {
-        // console.log(e);
-      });
-  };
+  //   ProductDataService.update(currentProduct.id, data)
+  //     .then((response) => {
+  //       setCurrentProduct({ ...currentProduct, purchasable: status });
+  //       // console.log(response.data);
+  //     })
+  //     .catch((e) => {
+  //       // console.log(e);
+  //     });
+  // };
 
-  const updateProduct = () => {
-    ProductDataService.update(currentProduct.id, currentProduct)
-      .then((response) => {
-        // console.log(response.data);
-        setMessage("The Product was updated successfully!");
-      })
-      .catch((e) => {
-        // console.log(e);
-      });
-  };
+  // const updateProduct = () => {
+  //   ProductDataService.update(currentProduct.id, currentProduct)
+  //     .then((response) => {
+  //       // console.log(response.data);
+  //       setMessage("The Product was updated successfully!");
+  //     })
+  //     .catch((e) => {
+  //       // console.log(e);
+  //     });
+  // };
 
-  const deleteProduct = () => {
-    ProductDataService.remove(currentProduct.id)
-      .then((response) => {
-        // console.log(response.data);
-        props.history.push("/Products");
-      })
-      .catch((e) => {
-        // console.log(e);
-      });
-  };
+  // const deleteProduct = () => {
+  //   ProductDataService.remove(currentProduct.id)
+  //     .then((response) => {
+  //       // console.log(response.data);
+  //       props.history.push("/Products");
+  //     })
+  //     .catch((e) => {
+  //       // console.log(e);
+  //     });
+  // };
 
   return (
     <>
       <SideBar />
       <div className="page-container">
         <div className="jumbotron">
-          <div>
-            {currentProduct ? (
-              <div className="edit-form">
-                <h2 className="mb-4">Update Product</h2>
-                <form>
-                  <div className="form-group">
-                    <label htmlFor="name">Name</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="name"
-                      name="name"
-                      value={currentProduct.name}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="regular_price">Regular price</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="regular_price"
-                      name="regular_price"
-                      value={currentProduct.regular_price}
-                      onChange={handleInputChange}
-                    />
-                  </div>
+          {/* <div>
+            <h1>Product Details</h1>
+            <h3>
+              <span className="badge-info badge-pill mr-3">Id </span>
+              {currentProduct.id}
+            </h3>
+            <h3>
+              <span className="badge-info badge-pill mr-3">Name </span>
+              {currentProduct.name}
+            </h3>
+            <h3>
+              <span className="badge-info badge-pill mr-3">Price </span>
+              {currentProduct.regular_price}
+            </h3>
+            <h3>
+              <span className="badge-info badge-pill mr-3">SKU </span>
+              {currentProduct.sku}
+            </h3>
 
-                  <div className="form-group">
-                    <label htmlFor="sale_price">Sale Price</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="sale_price"
-                      required
-                      value={currentProduct.sale_price}
-                      onChange={handleInputChange}
-                      name="sale_price"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="sku">Stock Keeping Unit</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="sku"
-                      required
-                      value={currentProduct.sku}
-                      onChange={handleInputChange}
-                      name="sku"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="p-2">
-                      <strong>Status:</strong>
-                    </label>
-                    {currentProduct.purchasable ? "Purchasable" : "Pending"}
-                  </div>
-                </form>
-
-                {currentProduct.purchasable ? (
-                  <button
-                    className="btn btn-primary mr-2"
-                    onClick={() => updatePurchasable(false)}
-                  >
-                    Pending
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-primary mr-2"
-                    onClick={() => updatePurchasable(true)}
-                  >
-                    Purchasable
-                  </button>
-                )}
-
-                <button className="btn btn-danger mr-2" onClick={deleteProduct}>
-                  Delete
-                </button>
-
-                <button
-                  type="submit"
-                  className="btn btn-success"
-                  onClick={updateProduct}
-                >
-                  Update
-                </button>
-                <p>{message}</p>
-              </div>
-            ) : (
-              <div>
-                <br />
-                <p>Please click on a Product...</p>
-              </div>
-            )}
-          </div>
+           
+            
+          </div> */}
+          <h1 className="text-center"> Details</h1>
+          <Table singleLine>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Properties</Table.HeaderCell>
+                <Table.HeaderCell>Values</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell>ID</Table.Cell>
+                <Table.Cell>{currentProduct.id}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>Name</Table.Cell>
+                <Table.Cell>{currentProduct.name}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>SKU</Table.Cell>
+                <Table.Cell>{currentProduct.sku}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>Price</Table.Cell>
+                <Table.Cell>{currentProduct.price}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>Status</Table.Cell>
+                <Table.Cell>{currentProduct.status}</Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
         </div>
       </div>
     </>
