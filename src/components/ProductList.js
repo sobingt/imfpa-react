@@ -4,9 +4,9 @@ import SideBar from "../SideBar";
 import GetImages from "./GetImages";
 import { Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { TablePagination } from "react-pagination-table";
 import "./ProductList.css";
 import { Switch } from "antd";
+import Product from "./Product";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -14,16 +14,25 @@ const ProductList = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [searchName, setSearchName] = useState("");
   const [imageStatus, setImageStatus] = useState(false);
+  const [perPage, setPerPage] = useState(10);
 
-  const Header = ["Id", "Name", "Price", "SKU", "Status"];
   useEffect(() => {
     retriveProducts();
   }, []);
+
+  // getting per_page selected value
+  const onOptionChange = (e) => {
+    setPerPage(e.target.value);
+  };
+  const onPageClick = () => {
+    retriveProducts();
+  };
+
   const ToggleButton = () => {
     imageStatus ? setImageStatus(false) : setImageStatus(true);
   };
   const retriveProducts = () => {
-    ProductDataService.getAll(10, currentIndex)
+    ProductDataService.getAllProducts(perPage, currentIndex)
 
       .then((response) => {
         setProducts(response.data);
@@ -35,7 +44,7 @@ const ProductList = () => {
   };
 
   const nextProducts = () => {
-    ProductDataService.getAll(10, currentIndex + 1)
+    ProductDataService.getAllProducts(10, currentIndex + 1)
 
       .then((response) => {
         setProducts(response.data);
@@ -51,7 +60,7 @@ const ProductList = () => {
   const prevProducts = () => {
     const prevPage = currentIndex - 1;
     setCurrentIndex(prevPage);
-    ProductDataService.getAll(10, currentIndex)
+    ProductDataService.getAllProducts(10, currentIndex)
 
       .then((response) => {
         setProducts(response.data);
@@ -88,6 +97,8 @@ const ProductList = () => {
       });
   };
 
+  console.log(products);
+
   return (
     <>
       <SideBar />
@@ -121,21 +132,18 @@ const ProductList = () => {
             </div>
           </div>
 
-          {/* <TablePagination
-            title="Product List"
-            // subTitle="Sub Title"
-            headers={Header}
-            data={products}
-            columns="id.name.price.sku.status"
-            perPageItemCount={10}
-            // partialPageCount={3}
-            totalCount={100}
-            arrayOption={[["size", "all", " "]]}
-            nextPageText="Next"
-            prePageText="Prev"
-            className="table-striped table-light table-responsive"
-          /> */}
+          <h4 className="title">Product List</h4>
 
+          <select
+            className="float-right bg-light text-primary p-2 m-1"
+            onChange={onOptionChange}
+            onClick={onPageClick}
+          >
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30"> 30</option>
+            <option value="40">40</option>
+          </select>
           <Table singleLine>
             <Table.Header>
               <Table.Row>
@@ -157,9 +165,10 @@ const ProductList = () => {
               {products.map((product) => {
                 return (
                   <Table.Row key={product.id}>
-                    <Link to={`/products/${product.id}`}>
-                      <Table.Cell>{product.id}</Table.Cell>
-                    </Link>
+                    <Table.Cell>
+                      <Link to={`/products/${product.id}`}>{product.id} </Link>
+                    </Table.Cell>
+
                     <Table.Cell>
                       <a target="_blank" href={product.permalink}>
                         {product.name}

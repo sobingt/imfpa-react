@@ -1,9 +1,9 @@
 import http from "../http";
 
-const getAll = (per_page, pageNumber) => {
+const getAllProducts = (per_page, pageNumber) => {
   return http.get(`/products?per_page=${per_page}&page=${pageNumber}`);
 };
-const getCategory = (per_page, pageNumber) => {
+const getProductByCategory = (per_page, pageNumber) => {
   return http.get(
     `/products?category=156&per_page=${per_page}&page=${pageNumber}`
   );
@@ -43,10 +43,10 @@ const findById = (id) => {
 };
 
 export default {
-  getAll,
+  getAllProducts,
   get,
   findByTerm,
   findById,
-  getCategory,
+  getProductByCategory,
   findByTermInPainting,
 };
