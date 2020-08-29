@@ -8,6 +8,8 @@ import AddProduct from "./components/AddProduct";
 import Product from "./components/Product";
 import ProductList from "./components/ProductList";
 import PaintingList from "./components/PaintingList";
+import AddVariation from "./components/AddVariation";
+
 function App() {
   return (
     <>
@@ -18,6 +20,7 @@ function App() {
         <Route path="/paintings" component={PaintingList} />
         <Route path="/products/:id" component={Product} />
         <Route exact path={["/", "/products"]} component={ProductList} />
+        <Route path="/add-variation" component={AddVariation} />
         <Route component={Error} />
       </Switch>
     </>

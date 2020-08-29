@@ -37,6 +37,18 @@ const PaintingList = () => {
       });
   };
 
+  //delete all painting variations
+  const deleteAllVariation = (id, variations) => {
+    const deleteVariationData = { delete: variations };
+    ProductDataService.removeVariation(id, deleteVariationData)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // console.log(error.response.data);
+      });
+  };
+
   const nextProducts = () => {
     if (searchName != "") {
       ProductDataService.findByTermInPainting(searchName, 10, currentIndex + 1)
@@ -176,6 +188,7 @@ const PaintingList = () => {
                   <Switch onClick={ToggleButton} />
                 </Table.HeaderCell>
                 <Table.HeaderCell>Variations</Table.HeaderCell>
+                <Table.HeaderCell>Variation Action</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -195,10 +208,25 @@ const PaintingList = () => {
                     <Table.Cell>
                       {imageStatus ? <GetImages sku={product.sku} /> : "false"}
                     </Table.Cell>
+                    <Table.Cell>{product.variations.length}</Table.Cell>
                     <Table.Cell>
-                      {product.variations.length}
-                      <button className="variation-btn">Create All</button>
-                      <button className="variation-btn">Delete All</button>
+                      <Link to="/add-variation">
+                        {" "}
+                        <button className="variation-btn">
+                          Create 66 Variation
+                        </button>
+                      </Link>
+
+                      <button
+                        className="variation-btn"
+                        onClick={deleteAllVariation(
+                          product.id,
+                          product.variations
+                        )}
+                        value={product.id}
+                      >
+                        Delete All Variation
+                      </button>
                     </Table.Cell>
                   </Table.Row>
                 );

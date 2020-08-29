@@ -6,7 +6,6 @@ import { Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import "./ProductList.css";
 import { Switch } from "antd";
-import Product from "./Product";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);

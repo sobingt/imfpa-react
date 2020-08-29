@@ -33,6 +33,12 @@ const get = (id) => {
 // const remove = (id) => {
 //   return http.delete(`/products/${id}`);
 // };
+const removeVariation = (id, variations) => {
+  return http.delete(
+    `/wp-json/wc/v3/products/${id}/variations/batch`,
+    variations
+  );
+};
 
 // const removeAll = () => {
 //   return http.delete(`/products`);
@@ -49,4 +55,5 @@ export default {
   findById,
   getProductByCategory,
   findByTermInPainting,
+  removeVariation,
 };
