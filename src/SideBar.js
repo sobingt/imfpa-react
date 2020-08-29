@@ -65,7 +65,7 @@ function SideBar() {
               className="btn text-white"
               onClick={onLogout}
             >
-              <i className="fa fa-sign-out pl-3" aria-hidden="true"></i>
+              <i className="fa fa-sign-out pl-4" aria-hidden="true"></i>
               <font>Logout</font>
             </button>
           </li>

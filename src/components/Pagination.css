@@ -1,0 +1,9 @@
+.active {
+  background-color: #2574a9;
+  color: white;
+  padding: 10px;
+}
+
+.pagination-anchor {
+  color: black;
+}
