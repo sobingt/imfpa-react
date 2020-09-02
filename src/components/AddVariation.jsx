@@ -27,11 +27,6 @@ const AddVariation = () => {
         regular_price: `${regularPrice}`,
         sale_price: `${salePrice}`,
       },
-      {
-        price: `${price}`,
-        regular_price: `${regularPrice}`,
-        sale_price: `${salePrice}`,
-      },
     ],
   };
 

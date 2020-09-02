@@ -33,20 +33,20 @@ const PaintingList = () => {
         console.log(response.data);
       })
       .catch((e) => {
-        // console.log(e);
+        console.log(e);
       });
   };
 
   //delete all painting variations
   const deleteAllVariation = (id, variations) => {
-    const deleteVariationData = { delete: variations };
-    ProductDataService.removeVariation(id, deleteVariationData)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        // console.log(error.response.data);
-      });
+    // const deleteVariationData = { delete: variations };
+    // ProductDataService.removeVariation(id, deleteVariationData)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.response.data);
+    //   });
   };
 
   const nextProducts = () => {

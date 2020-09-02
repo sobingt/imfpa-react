@@ -34,10 +34,7 @@ const get = (id) => {
 //   return http.delete(`/products/${id}`);
 // };
 const removeVariation = (id, variations) => {
-  return http.delete(
-    `/wp-json/wc/v3/products/${id}/variations/batch`,
-    variations
-  );
+  return http.post(`products/${id}/variations/batch`, variations);
 };
 
 // const removeAll = () => {
