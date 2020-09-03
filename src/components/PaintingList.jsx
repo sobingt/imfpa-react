@@ -1,35 +1,52 @@
 import React, { useState, useEffect } from "react";
 import ProductDataService from "../services/ProductServices";
-import ImageStatus from "./ImageStatus";
 import GetImages from "./GetImages";
 import { Link } from "react-router-dom";
 import { Switch } from "antd";
-
-// import { Link } from "react-router-dom";
-// import ReactDOM from "react-dom";
 import SideBar from "../SideBar";
-// import { TablePagination } from "react-pagination-table";
 import "./ProductList.css";
-import { Icon, Menu, Table } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 
 const PaintingList = () => {
   const [products, setProducts] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [currentIndex, setCurrentIndex] = useState(1);
   const [imageStatus, setImageStatus] = useState(false);
+  const [perPage, setPerPage] = useState(10);
   useEffect(() => {
     retriveProducts();
   }, []);
 
+  // getting per_page selected value
+  const onOptionChange = (e) => {
+    setPerPage(e.target.value);
+  };
+
+  const onPageClick = () => {
+    retriveProducts();
+  };
+
   const retriveProducts = () => {
-    ProductDataService.getCategory(10, currentIndex)
+    ProductDataService.getProductByCategory(perPage, currentIndex)
       .then((response) => {
         setProducts(response.data);
         console.log(response.data);
       })
       .catch((e) => {
-        // console.log(e);
+        console.log(e);
       });
+  };
+
+  //delete all painting variations
+  const deleteAllVariation = (id, variations) => {
+    // const deleteVariationData = { delete: variations };
+    // ProductDataService.removeVariation(id, deleteVariationData)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.response.data);
+    //   });
   };
 
   const nextProducts = () => {
@@ -46,7 +63,7 @@ const PaintingList = () => {
           // console.log(e);
         });
     } else {
-      ProductDataService.getCategory(10, currentIndex + 1)
+      ProductDataService.getProductByCategory(10, currentIndex + 1)
 
         .then((response) => {
           setProducts(response.data);
@@ -76,7 +93,7 @@ const PaintingList = () => {
           // console.log(e);
         });
     } else {
-      ProductDataService.getCategory(10, currentIndex - 1)
+      ProductDataService.getProductByCategory(10, currentIndex - 1)
 
         .then((response) => {
           setProducts(response.data);
@@ -151,7 +168,16 @@ const PaintingList = () => {
           </div>
 
           <h4 className="title">Painting List</h4>
-
+          <select
+            className="float-right bg-light text-primary p-2 m-1"
+            onChange={onOptionChange}
+            onClick={onPageClick}
+          >
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+          </select>
           <Table singleLine>
             <Table.Header>
               <Table.Row>
@@ -163,6 +189,7 @@ const PaintingList = () => {
                   <Switch onClick={ToggleButton} />
                 </Table.HeaderCell>
                 <Table.HeaderCell>Variations</Table.HeaderCell>
+                <Table.HeaderCell>Variation Action</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -170,19 +197,38 @@ const PaintingList = () => {
               {products.map((product) => {
                 return (
                   <Table.Row key={product.id}>
-                    <Link to={`/products/${product.id}`}>
-                      <Table.Cell>{product.id}</Table.Cell>
-                    </Link>
+                    <Table.Cell>
+                      {" "}
+                      <Link to={`/products/${product.id}`}>{product.id}</Link>
+                    </Table.Cell>
+
                     <Table.Cell>
                       <a href={product.permalink}>{product.name}</a>
                     </Table.Cell>
                     <Table.Cell>{product.sku}</Table.Cell>
                     <Table.Cell>
-                      {/* <GetImages sku={product.sku} /> */}
-                      {/* <ImageStatus sku={product.sku}/> */}
                       {imageStatus ? <GetImages sku={product.sku} /> : "false"}
                     </Table.Cell>
                     <Table.Cell>{product.variations.length}</Table.Cell>
+                    <Table.Cell>
+                      <Link to="/add-variation">
+                        {" "}
+                        <button className="variation-btn">
+                          Create 66 Variation
+                        </button>
+                      </Link>
+
+                      <button
+                        className="variation-btn"
+                        onClick={deleteAllVariation(
+                          product.id,
+                          product.variations
+                        )}
+                        value={product.id}
+                      >
+                        Delete All Variation
+                      </button>
+                    </Table.Cell>
                   </Table.Row>
                 );
               })}

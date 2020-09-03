@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProductDataService from "../services/ProductServices";
 import SideBar from "../SideBar";
-import { Link } from "react-router-dom";
-// import { Item } from "semantic-ui-react";
 import { Table } from "semantic-ui-react";
 
 const Product = (props) => {
@@ -16,7 +14,6 @@ const Product = (props) => {
     sku: "",
   };
   const [currentProduct, setCurrentProduct] = useState(initialProductState);
-  // const [message, setMessage] = useState("");
 
   const getProduct = (id) => {
     ProductDataService.get(id)
