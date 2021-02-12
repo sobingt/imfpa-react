@@ -11,6 +11,7 @@ import PaintingList from "./components/PaintingList";
 import AddVariation from "./components/AddVariation";
 
 function App() {
+
   return (
     <>
       <Switch>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { PostData } from "../services/PostData";
 import { Redirect } from "react-router-dom";
+import db from "../services/LocalDBService";
 
 const LoginScreen = () => {
   const [user, setUser] = useState({
@@ -24,9 +25,8 @@ const LoginScreen = () => {
   const onSubmit = () => {
     PostData(user).then((result) => {
       let responseJSON = result;
-      // console.log(responseJSON);
       if (responseJSON.token) {
-        sessionStorage.setItem("userData", responseJSON);
+        sessionStorage.setItem("userData", JSON.stringify(responseJSON));
         setUser({ redirect: true });
       } else {
         console.log("Incorrect Login Details");
@@ -41,6 +41,7 @@ const LoginScreen = () => {
     return <Redirect to={"/dashboard"} />;
   }
 
+  db.init();
   return (
     <div className="container text-center mt-5 pt-5">
       <div className="col-md-6 offset-md-3">

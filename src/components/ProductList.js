@@ -6,10 +6,10 @@ import { Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import "./ProductList.css";
 import { Switch } from "antd";
+import db from "../services/LocalDBService";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
-  // const [currentProduct, setCurrentProduct] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(1);
   const [searchName, setSearchName] = useState("");
   const [imageStatus, setImageStatus] = useState(false);
@@ -35,7 +35,7 @@ const ProductList = () => {
 
       .then((response) => {
         setProducts(response.data);
-        console.log(response.data);
+        db.appendProducts(response.data)
       })
       .catch((e) => {
         // console.log(e);
@@ -50,6 +50,7 @@ const ProductList = () => {
         console.log(response.data);
         const nextPage = currentIndex + 1;
         setCurrentIndex(nextPage);
+        db.appendProducts(response.data)
       })
       .catch((e) => {
         // console.log(e);
@@ -64,6 +65,7 @@ const ProductList = () => {
       .then((response) => {
         setProducts(response.data);
         console.log(response.data);
+        db.appendProducts(response.data)
       })
       .catch((e) => {
         // console.log(e);
@@ -78,7 +80,7 @@ const ProductList = () => {
     ProductDataService.findById(searchName)
       .then((response) => {
         setProducts(response.data);
-        // console.log(response.data);
+        db.appendProducts(response.data)
       })
       .catch((e) => {
         // console.log(e);
@@ -89,14 +91,12 @@ const ProductList = () => {
     ProductDataService.findByTerm(searchName)
       .then((response) => {
         setProducts(response.data);
-        // console.log(response.data);
+        db.appendProducts(response.data)
       })
       .catch((e) => {
         // console.log(e);
       });
   };
-
-  console.log(products);
 
   return (
     <>

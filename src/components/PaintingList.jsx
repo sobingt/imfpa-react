@@ -6,6 +6,7 @@ import { Switch } from "antd";
 import SideBar from "../SideBar";
 import "./ProductList.css";
 import { Table } from "semantic-ui-react";
+import db from "../services/LocalDBService";
 
 const PaintingList = () => {
   const [products, setProducts] = useState([]);
@@ -30,24 +31,15 @@ const PaintingList = () => {
     ProductDataService.getProductByCategory(perPage, currentIndex)
       .then((response) => {
         setProducts(response.data);
-        console.log(response.data);
+        console.log("esponse.data")
+        console.log(response.data)
+        db.appendProducts(response.data)
       })
       .catch((e) => {
         console.log(e);
       });
   };
 
-  //delete all painting variations
-  const deleteAllVariation = (id, variations) => {
-    // const deleteVariationData = { delete: variations };
-    // ProductDataService.removeVariation(id, deleteVariationData)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.response.data);
-    //   });
-  };
 
   const nextProducts = () => {
     if (searchName != "") {
@@ -58,6 +50,7 @@ const PaintingList = () => {
           console.log(response.data);
           const nextPage = currentIndex + 1;
           setCurrentIndex(nextPage);
+          db.appendProducts(response.data)
         })
         .catch((e) => {
           // console.log(e);
@@ -70,6 +63,7 @@ const PaintingList = () => {
           console.log(response.data);
           const nextPage = currentIndex + 1;
           setCurrentIndex(nextPage);
+          db.appendProducts(response.data)
         })
         .catch((e) => {
           // console.log(e);
@@ -88,6 +82,7 @@ const PaintingList = () => {
           console.log(response.data);
           const prevPage = currentIndex - 1;
           setCurrentIndex(prevPage);
+          db.appendProducts(response.data)
         })
         .catch((e) => {
           // console.log(e);
@@ -100,6 +95,7 @@ const PaintingList = () => {
           console.log(response.data);
           const prevPage = currentIndex - 1;
           setCurrentIndex(prevPage);
+          db.appendProducts(response.data)
         })
         .catch((e) => {
           // console.log(e);
@@ -115,7 +111,7 @@ const PaintingList = () => {
     ProductDataService.findById(searchName)
       .then((response) => {
         setProducts(response.data);
-        // console.log(response.data);
+        db.appendProducts(response.data)
       })
       .catch((e) => {
         // console.log(e);
@@ -133,6 +129,18 @@ const PaintingList = () => {
       });
   };
 
+  const findBySKU = () => {
+    ProductDataService.findBySKU(searchName, 10, currentIndex)
+      .then((response) => {
+        setProducts(response.data);
+        // console.log(response.data);
+      })
+      .catch((e) => {
+        // console.log(e);
+      });
+  };
+
+  
 
   return (
     <div>
@@ -155,6 +163,14 @@ const PaintingList = () => {
                   onClick={findById}
                 >
                   Search By Id
+                </button>
+
+                <button
+                  className="btn search-btn text-white btn-outline-secondary"
+                  type="button"
+                  onClick={findBySKU}
+                >
+                  Search By SKU
                 </button>
                 <button
                   className="btn search-btn text-white btn-outline-secondary"
@@ -220,10 +236,10 @@ const PaintingList = () => {
 
                       <button
                         className="variation-btn"
-                        onClick={deleteAllVariation(
-                          product.id,
-                          product.variations
-                        )}
+                        // onClick={deleteAllVariation(
+                        //   product.id,
+                        //   product.variations
+                        // )}
                         value={product.id}
                       >
                         Delete All Variation

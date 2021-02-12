@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./SideBar.css";
 import { Link, Redirect } from "react-router-dom";
+import db from "./services/LocalDBService"
 
 function SideBar() {
   const [redirect, setRedirect] = useState(false);
@@ -13,8 +14,7 @@ function SideBar() {
   }, []);
 
   const onLogout = () => {
-    sessionStorage.setItem("userData", "");
-    sessionStorage.clear();
+    db.init();
     setRedirect({ redirect: true });
   };
 
